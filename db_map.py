@@ -6,26 +6,24 @@ import dash_bootstrap_components as dbc
 
 mapbox_access_token = "pk.eyJ1IjoianVzdGluZm1jY2FydHkiLCJhIjoiY2tkb3hnbzVzMDBuMTJ4bXl1eXdvc3oyaiJ9.Vl4TxX3lRX8YxfrFV8PJ8g"
 
-def generate_bipv_db_map(file_path):
-    data = pd.read_csv(file_path)
+def generate_bipv_db_map(data):
     fig = go.Figure(
         go.Scattermapbox(
             lat=data['Project Latitude'],
             lon=data['Project Longitude'],
             mode='markers',
             marker=go.scattermapbox.Marker(
-                size=8,
+                size=10,
                 color='rgb(242, 177, 172)',
-                opacity=0.5
-                ),
-            text=data['Project Name'],
+                opacity=0.5,
+    ),
+            hoverinfo='none',
         ),
         )
 
     fig.update_layout(
-        autosize=False,
+        autosize=True,
         margin=dict(l=0, r=0, t=0, b=0),
-        
         hovermode='closest',
         mapbox=dict(
             accesstoken=mapbox_access_token,
@@ -38,4 +36,5 @@ def generate_bipv_db_map(file_path):
         ),
     )
 
-    return fig 
+    return fig
+
