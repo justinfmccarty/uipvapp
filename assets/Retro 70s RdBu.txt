@@ -1,0 +1,46 @@
+# Retro 70s RdBu
+Generated with ColorSlurp
+
+*Flamingo*
+HEX: #ee6a35
+RGB: 238, 106, 53, 100
+
+*Punch*
+HEX: #da381f
+RGB: 218, 56, 31, 100
+
+*Rajah*
+HEX: #fbac6d
+RGB: 251, 172, 109, 100
+
+*Pancho*
+HEX: #edd5a9
+RGB: 237, 213, 169, 100
+
+*Sea Nymph*
+HEX: #81a8a0
+RGB: 129, 168, 160, 100
+
+*Jelly Bean*
+HEX: #238695
+RGB: 35, 134, 149, 100
+
+*Matisse*
+HEX: #1a698a
+RGB: 26, 105, 138, 100
+
+*Madison*
+HEX: #062551
+RGB: 6, 37, 81, 100
+
+*Pine Glade*
+HEX: #c2cb7e
+RGB: 194, 203, 126, 100
+
+*Old Copper*
+HEX: #6f462e
+RGB: 111, 70, 46, 100
+
+*Equator*
+HEX: #e2c45e
+RGB: 226, 196, 94, 100

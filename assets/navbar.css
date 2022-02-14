@@ -9,13 +9,13 @@
 }
 
 #page {
+  margin: 0px;
   height: var(--app_height);
   width: var(--app_width);
   /*background: green;*/
 }
 
 .container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
-  width: 100%;
   margin-right: 0px;
   margin-left: 0px;
 }
@@ -31,16 +31,17 @@
 }
 
 #main_row{
-  height: 98%;
+  height: 100%;
   width: 100%;
+  horiz-align: right;
   vertical-align: top;
-  background: red;
+  background: white;
 }
 
 #nav_col { 
   height: 100%;
   vertical-align: middle;
-  border-width: 5px;
+  /*border-width: 5px;*/
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -57,27 +58,42 @@
 
 #body_col { 
   /*height: 100%;*/
-  /*width: 100;*/
-  z-index: 0;
+  /*width: 100%;*/
+  /*z-index: 0;*/
   /*margin-left: -25%;*/
-  background: orange;
+  /*background: white;*/
 }
 
 #body_col_child{
-  width: calc((12/12) * var(--app_width));
+  width: calc((12/12) * var(--app_width) + 5%);
   margin-left: calc((-3/12) * var(--app_width));
   height: 100%;
-  background: black;
+  padding-left: 4%;
+  padding-right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  left: -25vw;
+  position: absolute;
+  /*left: -5vw;*/
+  /*background: repeating-linear-gradient(200deg,*/
+  /*                            rgba(218, 56, 31, 0.25),*/
+  /*                            rgba(238, 106, 53, 0.25),*/
+  /*                            rgba(251, 172, 109, 0.25),*/
+  /*                            rgba(237, 213, 169, 0.25),*/
+  /*                            rgba(129, 168, 160, 0.25),*/
+  /*                            rgba(35, 134, 149, 0.25),*/
+  /*                            rgba(26, 105, 138, 0.25),*/
+  /*                            rgba(6, 37, 81, 0.25),*/
+  /*                            rgba(26, 105, 138, 0.25),*/
+  /*                            rgba(35, 134, 149, 0.25),*/
+  /*                            rgba(129, 168, 160, 0.25),*/
+  /*                            rgba(237, 213, 169, 0.25));*/
+  /*background-size: 350% 350%;*/
+  /*-webkit-animation: AnimationName 2s ease infinite alternate-reverse;*/
+  /*-moz-animation: AnimationName 2s ease infinite alternate-reverse;*/
+  /*animation: AnimationName 2s ease infinite alternate-reverse;*/
 }
 
-/*#footer_row {*/
-/*  height: 2%;*/
-/*  background: black;*/
-/*}*/
 
 #nav_bar {
   height: 35px;
@@ -126,6 +142,45 @@
   transition: all 0.2s;
 }
 
+#about_page {
+  padding: 5px;
+  text-align: justify;
+  align-content: center;
+  width: 30vw;
+  height: var(--nav_width);
+  /*https://www.gradient-animator.com*/
+  background: repeating-linear-gradient(200deg,
+                              rgba(218, 56, 31, 1.00),
+                              rgba(238, 106, 53, 1.00),
+                              rgba(251, 172, 109, 1.00),
+                              rgba(237, 213, 169, 1.00),
+                              rgba(129, 168, 160, 1.00),
+                              rgba(35, 134, 149, 1.00),
+                              rgba(26, 105, 138, 1.00),
+                              rgba(6, 37, 81, 1.00));
+  /*background-repeat: repeat-x;*/
+  background-size: 350% 350%;
+  -webkit-animation: AnimationName 25s ease infinite;
+  -moz-animation: AnimationName 25s ease infinite;
+  animation: AnimationName 25s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 78%}
+    50%{background-position:100% 23%}
+    100%{background-position:0% 78%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 78%}
+    50%{background-position:100% 23%}
+    100%{background-position:0% 78%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 78%}
+    50%{background-position:100% 23%}
+    100%{background-position:0% 78%}
+}
+
 #map {
   display: block;
   height: 100%;
@@ -134,11 +189,27 @@
 .content_container {
   height: 100%;
   width: 100%;
-  background: coral;
+  background: white;
 }
 
-.placeholder_text {
-  color: red;
+.overview_container {
+  height: var(--nav_width);
+  margin-top: -100px;
+  width: 95%;
+  background: white;
+  align-content: center;
+
+}
+
+.overview_graphs {
+  height: 50%;
+  width: 50%;
+  display: inline-block;
+  padding: 50px;
+}
+
+#abstract {
+  color: white;
 }
 
 .map_hover_box{
