@@ -1,0 +1,14 @@
+/* Description */
+highlight,retrofit_cat,new_cat,white,black,colorbar
+
+/* CSV */
+e2c45e,6f462e,c2cb7e,e9ede9,1c221c,da381f,ee6a35,fbac6d,edd5a9,81a8a0,238695,1a698a,062551
+
+/* With # */
+#e2c45e, #6f462e, #c2cb7e, #e9ede9, #1c221c, #da381f, #ee6a35, #fbac6d, #edd5a9, #81a8a0, #238695, #1a698a, #062551
+
+/* Array */
+["e2c45e","6f462e","c2cb7e","e9ede9","1c221c","da381f","ee6a35","fbac6d","edd5a9","81a8a0","238695","1a698a","062551"]
+
+/* Object */
+{"Equator":"e2c45e","Old Copper":"6f462e","Pine Glade":"c2cb7e","Platinum":"e9ede9","Dark Jungle Green":"1c221c","Vermilion":"da381f","Mandarin":"ee6a35","Sandy Brown":"fbac6d","Wheat":"edd5a9","Morning Blue":"81a8a0","Metallic Seaweed":"238695","Blue Sapphire":"1a698a","Oxford Blue":"062551"}

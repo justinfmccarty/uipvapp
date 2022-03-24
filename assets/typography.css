@@ -1,6 +1,10 @@
+
+@import url('https://fonts.googleapis.com/css?family=Urbanist&display=swap');
+
 body {
-    font-family: sans-serif;
+    font-family: Urbanist, ui-sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
-    color: black
+    color: white;
+    text-align: center;
 }
