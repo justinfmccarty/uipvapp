@@ -6,9 +6,6 @@ import dash_bootstrap_components as dbc
 from utils import get_color_dict as colors
 from utils import is_retrofit
 
-mapbox_access_token = "pk.eyJ1IjoianVzdGluZm1jY2FydHkiLCJhIjoiY2tkb3hnbzVzMDBuMTJ4bXl1eXdvc3oyaiJ9.Vl4TxX3lRX8YxfrFV8PJ8g"
-
-
 def choose_colors(project_type):
     if project_type == 'Retrofit':
         return colors()['retrofit_cat']
