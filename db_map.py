@@ -5,6 +5,9 @@ from dash import dash, callback, html, dcc, dash_table, Input, Output, State, MA
 import dash_bootstrap_components as dbc
 from utils import get_color_dict as colors
 from utils import is_retrofit
+import os
+
+mapbox_access_token = os.getenv('MAPBOX_KEY')
 
 def choose_colors(project_type):
     if project_type == 'Retrofit':
