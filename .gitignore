@@ -1,4 +1,6 @@
 # dev stuff
 notebooks/
+notebooks/*.ipynb
+notebooks/archive/*
 *.ipynb
 *.DS_Store
