@@ -1,0 +1,4 @@
+# dev stuff
+notebooks/
+*.ipynb
+*.DS_Store
