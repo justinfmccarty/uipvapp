@@ -1,10 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=Libre+Franklin&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lora&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Source+Serif+Pro&display=swap');
 
-@import url('https://fonts.googleapis.com/css?family=Urbanist&display=swap');
-
-body {
-    font-family: Urbanist, ui-sans-serif;
-}
 h1, h2, h3, h4, h5, h6 {
-    color: white;
-    text-align: center;
+    font-family: "Libre Franklin", sans-serif;
+    color: black;
+    text-align: left;
+}
+
+p {
+    font-family: "Lora", serif;
+    color: grey;
+    text-align: left;
+    /*font-weight: 700;*/
+    font-style: normal;
+    font-size: 10px;
+    -webkit-font-smoothing: antialiased;
+}
+
+hover_data_table_style {
+    font-family: "Lora", serif;
+    color: grey;
+    text-align: left;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 8px;
+    -webkit-font-smoothing: antialiased;
 }
