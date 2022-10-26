@@ -211,7 +211,7 @@ layout_map_page = html.Div([
 
 layout_overview_page = html.Div(children=[
     dcc.Store(data=data_intitial.to_dict(),
-                      id='dataframe_init'),
+              id='dataframe_init'),
     dcc.Dropdown(['Year and Type',
                   'Generation and Capacity',
                   'Surface Area and Yield',
@@ -219,17 +219,17 @@ layout_overview_page = html.Div(children=[
                  'Year and Type',
                  id='graph_selector'),
     html.Div(children=[
-#         dcc.Graph(
-#             figure=db_overview.make_projects_by_year(data_intitial),
-#             responsive=True,
-#             clear_on_unhover=True),
-#     ], className='overview_graphs'),
-#     html.Div([
-#         dcc.Graph(
-#             figure=db_overview.make_projects_by_generation_capacity(data_intitial),
-#             responsive=True,
-#             clear_on_unhover=True),
-    ], id='overview_graphs_target' ,
+        #         dcc.Graph(
+        #             figure=db_overview.make_projects_by_year(data_intitial),
+        #             responsive=True,
+        #             clear_on_unhover=True),
+        #     ], className='overview_graphs'),
+        #     html.Div([
+        #         dcc.Graph(
+        #             figure=db_overview.make_projects_by_generation_capacity(data_intitial),
+        #             responsive=True,
+        #             clear_on_unhover=True),
+    ], id='overview_graphs_target',
         className='overview_graph_box'),
 ],
     className='overview_container')
@@ -251,18 +251,18 @@ app.validation_layout = html.Div([
 ])
 
 
-@app.callback(Output('overview_graphs_target','children'),
-              Input('graph_selector','value'),
+@app.callback(Output('overview_graphs_target', 'children'),
+              Input('graph_selector', 'value'),
               Input('dataframe_init', 'data'))
-def update_overview_graph(option,data_store):
-    data = generate_dataframe()# pd.DataFrame.from_dict(data_store)
-    if option=='Year and Type':
+def update_overview_graph(option, data_store):
+    data = generate_dataframe()  # pd.DataFrame.from_dict(data_store)
+    if option == 'Year and Type':
         fig = db_overview.make_projects_by_year(data)
-    elif option=='Generation and Capacity':
+    elif option == 'Generation and Capacity':
         fig = db_overview.make_projects_by_generation_capacity(data)
-    elif option=='Surface Area and Yield':
+    elif option == 'Surface Area and Yield':
         fig = db_overview.make_projects_by_coverage_yield(data)
-    elif option=='Surface Type':
+    elif option == 'Surface Type':
         fig = db_overview.make_surface_type_plot(data)
     else:
         return html.H4("No Option")
@@ -270,6 +270,7 @@ def update_overview_graph(option,data_store):
         figure=fig,
         responsive=True,
         clear_on_unhover=True)
+
 
 # Index callbacks
 @app.callback(Output('body_col_child', 'children'),
@@ -583,5 +584,5 @@ def filter_data(date_range, functions, sys_type, elements, coverage,
 
 if __name__ == '__main__':
     app.run_server(
-        debug=False)
+        debug=True)
     # be sure to change to False when deploy to master

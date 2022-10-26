@@ -5,20 +5,21 @@ import plotly.graph_objects as go
 from dash import html
 
 import utils
-#
+
+mapbox_access_token = os.getenv('MAPBOX_KEY')
+# secret_file = os.path.join('secrets', 'mapbox_token.txt')
+# with open(secret_file, "r") as fp:
+#     mapbox_access_token = fp.readlines()[0]
+
 # head_file = os.path.join('.git', 'HEAD')
-#
 # with open(head_file, "r") as fp:
 #     branch = fp.readlines()[0]
-mapbox_access_token = os.getenv('MAPBOX_KEY')
 # if "master" in branch:
 #     mapbox_access_token = os.getenv('MAPBOX_KEY')
 # else:
 #     secret_file = os.path.join('secrets', 'mapbox_token.txt')
 #     with open(secret_file, "r") as fp:
 #         mapbox_access_token = fp.readlines()[0]
-
-
 # def generate_bipv_db_map(data):
 #     plot_data = data.copy()
 #     plot_data['Project Type'] = plot_data.apply(lambda x: is_retrofit(x['Project Built Year'],
