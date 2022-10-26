@@ -1,17 +1,14 @@
-import numpy as np
-from dash import dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL, no_update
-import db_map, db_overview
-import dash_bootstrap_components as dbc
-import pandas as pd
-import io
 import base64
-import plotly.graph_objects as go
-import time
-from dash.exceptions import PreventUpdate
-import utils
-from utils import is_retrofit, choose_colors, generate_table
+import io
+import dash_bootstrap_components as dbc
+import numpy as np
+import pandas as pd
 from PIL import Image
-import dash_leaflet as dl
+from dash import dash, html, dcc, Input, Output, State, no_update
+import db_map
+import db_overview
+import utils
+from utils import is_retrofit
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 

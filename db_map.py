@@ -1,13 +1,10 @@
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from dash import dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
-import dash_bootstrap_components as dbc
-import utils
 import itertools
 import os
-import dash_leaflet as dl
-from datetime import date
+import dash_bootstrap_components as dbc
+import plotly.graph_objects as go
+from dash import html
+
+import utils
 
 head_file = os.path.join('.git', 'HEAD')
 
