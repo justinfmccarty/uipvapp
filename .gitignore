@@ -1,6 +1,8 @@
 # dev stuff
 notebooks/
+secrets/
 notebooks/*.ipynb
 notebooks/archive/*
 *.ipynb
 *.DS_Store
+assets/images/*.png
