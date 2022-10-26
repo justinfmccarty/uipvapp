@@ -1,6 +1,7 @@
 # dev stuff
 notebooks/
 secrets/*
+*token.txt
 notebooks/*.ipynb
 notebooks/archive/*
 *.ipynb

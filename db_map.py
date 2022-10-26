@@ -17,7 +17,7 @@ with open(head_file, "r") as fp:
 if "master" in branch:
     mapbox_access_token = os.getenv('MAPBOX_KEY')
 else:
-    secret_file = os.path.join('secrets', 'token.txt')
+    secret_file = os.path.join('secrets', 'mapbox_token.txt')
     with open(secret_file, "r") as fp:
         mapbox_access_token = fp.readlines()[0]
 
