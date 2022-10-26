@@ -587,3 +587,4 @@ def filter_data(date_range, functions, sys_type, elements, coverage,
 if __name__ == '__main__':
     app.run_server(
         debug=False)
+    # be sure to change to False when deploy to master
