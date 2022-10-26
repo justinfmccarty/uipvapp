@@ -7,8 +7,11 @@ import io
 import base64
 import plotly.graph_objects as go
 import time
+from dash.exceptions import PreventUpdate
+import utils
 from utils import is_retrofit, choose_colors, generate_table
 from PIL import Image
+import dash_leaflet as dl
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
@@ -21,7 +24,27 @@ app = dash.Dash(
 
 server = app.server
 about_file = open('assets/about_description.txt', 'r')
-data = pd.read_csv('assets/database_display.csv')
+
+
+def generate_dataframe(cols=None):
+    data = pd.read_csv('assets/database_display.csv',
+                       index_col="Unnamed: 0",
+                       usecols=cols)
+    return data
+
+
+data_intitial = generate_dataframe()
+filter_fields = ['Project Built Year',
+                 'Project Function Clean',
+                 'System Type Clean',
+                 'Simple System Building Element',
+                 'System Coverage',
+                 'System Specific Yield Calculated',
+                 'System Generation',
+                 'Array Orientation(s) Clean',
+                 'Module Cell Type(s)',
+                 'Module Transparency',
+                 'Project Description']
 
 
 def get_menu_items():
@@ -87,9 +110,9 @@ def get_popover_children_click():
     return popover_children
 
 
-def create_menu_row(menu_item_name):
+def create_nav_row(menu_item_name):
     popover_child_hover = get_popover_children_hover()[menu_item_name]
-    popover_child_click = get_popover_children_click()[menu_item_name]
+    # popover_child_click = get_popover_children_click()[menu_item_name]
     main_div = [html.Div(
         dbc.NavItem(
             dbc.NavLink(menu_item_name,
@@ -108,14 +131,12 @@ def create_menu_row(menu_item_name):
                     delay={"show": 0, "hide": 100},
                     trigger="hover"),
 
-        dbc.Popover(popover_child_click,
-                    hide_arrow=True,
-                    id=f"{menu_item_name}_click",
-                    target=f"{menu_item_name}_link",
-                    # delay={"show": 150, "hide": 10000},
-                    is_open=False,
-                    # trigger="focus"
-                    )
+        # dbc.Popover(popover_child_click,
+        #             hide_arrow=True,
+        #             id=f"{menu_item_name}_click",
+        #             target=f"{menu_item_name}_link",
+        #             is_open=False,
+        #             )
     ]
     return main_div
 
@@ -123,7 +144,7 @@ def create_menu_row(menu_item_name):
 def create_nav_items():
     out_items = []
     for menu_item in get_menu_items():
-        out_items.append(create_menu_row(menu_item))
+        out_items.append(create_nav_row(menu_item))
     return [item for sublist in out_items for item in sublist]
 
 
@@ -157,50 +178,64 @@ layout_about_page = html.Div([
 ], id='about_page')
 
 layout_map_page = html.Div([
+    dcc.Store(data=data_intitial.to_dict(),
+              id='dataframe_init'),
+    dcc.Store(data=None,
+              id='dataframe_temp'),
+    # html.Div(children=[
+    #         dash_table.DataTable(
+    #             id='memory-table',
+    #             columns=[{'name': i, 'id': i} for i in data_intitial.columns if "Project" in i]
+    #         ),
+    #     ]),
+    html.Div(children=[
+        db_map.legend_table_sizes(),
+        db_map.legend_table_colors(),
+    ],
+        id="map_legend_container",
+        className="map_overlay"
+    ),
+    db_map.create_filter_container(filter_fields,
+                                   data_intitial),
     dcc.Graph(
         id='map',
-        figure=db_map.generate_bipv_db_map(data),
+        figure=db_map.generate_bipv_db_map_2(data_intitial),
         responsive=True,
-        animate=True,
+        # animate=True,
         clear_on_unhover=True,
         config={"displayModeBar": False}),
     dcc.Tooltip(
         id="graph_tooltip",
         loading_text="Loading..."),
-    html.Div(
-        id="legend_container"
-    ),
     html.Div(children=[db_map.map_modal()
                        ]
              ),
 ], className='content_container')
 
-layout_overview_page = html.Div([
-    html.Div([
-        dcc.Graph(
-            figure=db_overview.make_projects_by_year(data),
-            responsive=True,
-            clear_on_unhover=True),
-    ], className='overview_graphs'),
-    html.Div([
-        dcc.Graph(
-            figure=db_overview.make_projects_by_generation_capacity(data),
-            responsive=True,
-            clear_on_unhover=True),
-    ], className='overview_graphs'),
-    html.Div([
-        dcc.Graph(
-            figure=db_overview.make_projects_by_generation_capacity(data),
-            responsive=True,
-            clear_on_unhover=True),
-    ], className='overview_graphs'),
-    html.Div([
-        dcc.Graph(
-            figure=db_overview.make_projects_by_year(data),
-            responsive=True,
-            clear_on_unhover=True),
-    ], className='overview_graphs'),
-], className='overview_container')
+layout_overview_page = html.Div(children=[
+    dcc.Store(data=data_intitial.to_dict(),
+                      id='dataframe_init'),
+    dcc.Dropdown(['Year and Type',
+                  'Generation and Capacity',
+                  'Surface Area and Yield',
+                  'Surface Type'],
+                 'Year and Type',
+                 id='graph_selector'),
+    html.Div(children=[
+#         dcc.Graph(
+#             figure=db_overview.make_projects_by_year(data_intitial),
+#             responsive=True,
+#             clear_on_unhover=True),
+#     ], className='overview_graphs'),
+#     html.Div([
+#         dcc.Graph(
+#             figure=db_overview.make_projects_by_generation_capacity(data_intitial),
+#             responsive=True,
+#             clear_on_unhover=True),
+    ], id='overview_graphs_target' ,
+        className='overview_graph_box'),
+],
+    className='overview_container')
 
 url_bar_and_content_div = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -218,6 +253,26 @@ app.validation_layout = html.Div([
     layout_map_page,
 ])
 
+
+@app.callback(Output('overview_graphs_target','children'),
+              Input('graph_selector','value'),
+              Input('dataframe_init', 'data'))
+def update_overview_graph(option,data_store):
+    data = generate_dataframe()# pd.DataFrame.from_dict(data_store)
+    if option=='Year and Type':
+        fig = db_overview.make_projects_by_year(data)
+    elif option=='Generation and Capacity':
+        fig = db_overview.make_projects_by_generation_capacity(data)
+    elif option=='Surface Area and Yield':
+        fig = db_overview.make_projects_by_coverage_yield(data)
+    elif option=='Surface Type':
+        fig = db_overview.make_surface_type_plot(data)
+    else:
+        return html.H4("No Option")
+    return dcc.Graph(
+        figure=fig,
+        responsive=True,
+        clear_on_unhover=True)
 
 # Index callbacks
 @app.callback(Output('body_col_child', 'children'),
@@ -237,25 +292,40 @@ def display_page(pathname):
     Output("graph_tooltip", "show"),
     Output("graph_tooltip", "bbox"),
     Output("graph_tooltip", "children"),
-    Input("map", "hoverData"))
-def display_hover(hover_data):
+    [Input("map", "hoverData"),
+     State('dataframe_init', 'data')])
+def display_hover(hover_data, data_store):
     if hover_data is None:
         return False, no_update, no_update
     else:
-        # time.sleep(0.25)
+        # hover_cols = ['Unnamed: 0',
+        #               'Image Name',
+        #               'Project Name',
+        #               'Project Latitude',
+        #               'Project Longitude',
+        #               'Project Built Year',
+        #               'Project Plant Year',
+        #               'Project Function',
+        #               'Project Description']
 
+        # df = generate_dataframe(cols=hover_cols)
+        df = pd.DataFrame.from_dict(data_store)
         pt = hover_data["points"][0]
         bbox = pt["bbox"]
-        num = pt["pointNumber"]
 
-        data_row = data.iloc[num]
+        hover_lat = hover_data["points"][0]['lat']
+        hover_lon = hover_data["points"][0]['lon']
+        match = df[df['Project Latitude'] == hover_lat]
+        match = match[match['Project Longitude'] == hover_lon]
+        data_row = match.reset_index(drop=True).iloc[0]
+
         img_src = data_row['Image Name']
         name = data_row['Project Name']
         title_sz = 250 / len(name)
         lat = round(data_row['Project Latitude'], 2)
         long = round(data_row['Project Longitude'], 2)
         proj_type = is_retrofit(data_row['Project Built Year'], data_row['Project Plant Year'])
-        build_type = data_row['Project Function']
+        build_type = data_row['Project Function Clean']
         year = data_row['Project Plant Year'].astype(int)
         desc = data_row['Project Description']
 
@@ -270,6 +340,8 @@ def display_hover(hover_data):
         img_src = "data:image/jpeg;base64, " + encoded_image
 
         if desc is np.nan:
+            desc = 'No description available'
+        elif desc == None:
             desc = 'No description available'
         else:
             if len(desc) > 300:
@@ -296,17 +368,22 @@ def display_hover(hover_data):
     Output('map_modal', 'style'),
     Output("map_modal", "children"),
     # Output("modal_close_button", "style"),
-    [Input('map', 'clickData')])
-def show_modal(click_data):
+    [Input('map', 'clickData'),
+     State('dataframe_init', 'data')])
+def show_modal(click_data, data_store):
     if click_data == None:
         return {"display": "none"}, None  # , {"display": "none"}
     else:
-
+        df = pd.DataFrame.from_dict(data_store)
         pt = click_data["points"][0]
         bbox = pt["bbox"]
-        num = pt["pointNumber"]
 
-        data_row = data.iloc[num]
+        hover_lat = click_data["points"][0]['lat']
+        hover_lon = click_data["points"][0]['lon']
+        match = df[df['Project Latitude'] == hover_lat]
+        match = match[match['Project Longitude'] == hover_lon]
+        data_row = match.reset_index(drop=True).iloc[0]
+
         img_src = data_row['Image Name']
         name = data_row['Project Name']
         link = data_row['Project Link']
@@ -314,13 +391,6 @@ def show_modal(click_data):
         if pd.isna(link):
             link = None
             ext_link_id = "link_unavailable"
-        title_sz = 250 / len(name)
-        lat = round(data_row['Project Latitude'], 2)
-        long = round(data_row['Project Longitude'], 2)
-        proj_type = is_retrofit(data_row['Project Built Year'], data_row['Project Plant Year'])
-        build_type = data_row['Project Function']
-        year = data_row['Project Plant Year'].astype(int)
-        desc = data_row['Project Description']
 
         if img_src is np.nan:
             image_path = r'assets/images/placeholder.jpg'
@@ -342,18 +412,19 @@ def show_modal(click_data):
         proj_cols = ["Project Country",
                      # "Project Description",
                      "Project Type",
-                     "Project Function",
+                     "Project Function Clean",
                      "Project Built Year",
                      "Project Plant Year"]  # if same as Project Built Year, select one and rename to Project Year
 
-        sys_cols = ["System Type",
-                    "System Building Element",  # (s) # if multiple in the system then list here "Roof, Facade, Louvre"
+        sys_cols = ["System Type Clean",
+                    "Simple System Building Element",
+                    # (s) # if multiple in the system then list here "Roof, Facade, Louvre"
                     "System Rating",
                     "System Coverage",
                     "System Generation",
                     "System Specific Yield"]
 
-        arr_cols = ["Array Orientation(s)",  # (if not empty but non numeric, write in list (SW,NE,ROOF)
+        arr_cols = ["Array Orientation(s) Clean",  # (if not empty but non numeric, write in list (SW,NE,ROOF)
                     "Array Surface(s)",
                     "Array Tilt(s)",
                     "Module Transparency",
@@ -362,9 +433,9 @@ def show_modal(click_data):
         children = [
             html.Div(children=[
                 html.Div(name,
-                        id="modal_name",
-                        # style={"font-size": f"clamp({int(title_sz * 0.75)}px,{int(title_sz * 1.5)}px,25px"}
-                        ),
+                         id="modal_name",
+                         # style={"font-size": f"clamp({int(title_sz * 0.75)}px,{int(title_sz * 1.5)}px,25px"}
+                         ),
                 html.Div("",
                          id='modal_close_button',
                          className="close",
@@ -400,10 +471,10 @@ def show_modal(click_data):
             ),
             html.Div(children=[
                 html.Div(html.A("More info",
-                       href=link,
-                       target="_blank",
-                       id=ext_link_id,
-                       className="external_link"),id="more_info")
+                                href=link,
+                                target="_blank",
+                                id=ext_link_id,
+                                className="external_link"), id="more_info")
             ],
                 id='map_modal_bottom',
                 className="map_modal_container",
@@ -424,17 +495,94 @@ def close_modal(n):
               [Input('Map_button', 'n_clicks'),
                Input('Map_button', 'id')])
 def update_popover(n, id):
-    create_menu_row("Map")
+    create_nav_row("Map")
     return {"display": "none"}
 
 
-# clear the open popover when a new page is opened
-# @app.callback(Output('hidden_div', 'style'),
-#               [Input('Map_button', 'n_clicks'),
-#                Input('Map_button', 'id')])
-# def update_popover(n,id):
-#     create_menu_row("Map")
-#     return {"display": "none"}
+@app.callback(Output('map', 'figure'),
+              Output('dataframe_temp', 'data'),
+              [Input('filter_built_year', 'value'),
+               Input('filter_project_function', 'value'),
+               Input('filter_type', 'value'),
+               Input('filter_elements', 'value'),
+               Input('filter_coverage', 'value'),
+               Input('filter_specific_yield', 'value'),
+               Input('filter_generation', 'value'),
+               Input('filter_orientation', 'value'),
+               Input('filter_cell_types', 'value'),
+               Input('filter_transparency', 'value'),
+               Input('filter_input_description', 'value'),
+               State('dataframe_init', 'data'),
+               Input('map', 'relayoutData')])
+def filter_data(date_range, functions, sys_type, elements, coverage,
+                sp_yield, generation, orientation, cells, transparency,
+                search_term,
+                data, map_info):
+    if map_info == None:
+        df_init = generate_dataframe()
+        map = db_map.generate_bipv_db_map_2(df_init)
+        return map, df_init.to_dict()
+    else:
+        if len(map_info.keys()) == 1:
+            autosize = True
+            lat = 40
+            lon = 145
+            zoom = None
+        else:
+            autosize = False
+            lat = map_info['mapbox.center']['lat']
+            lon = map_info['mapbox.center']['lon']
+            zoom = map_info['mapbox.zoom']
+        # load dataframe from memory store
+        df = pd.DataFrame.from_dict(data)
+
+        # filtering
+        df = utils.filter_df_list_mixed_type(df,  # filter plant year
+                                             date_range,
+                                             "Project Built Year",
+                                             clip=(1945, None))
+        df = utils.filter_df_list(df,
+                                  functions,
+                                  "Project Function Clean")
+        df = utils.filter_df_list(df,
+                                  sys_type,
+                                  "System Type Clean")
+        df = utils.filter_df_list(df,
+                                  elements,
+                                  "Simple System Building Element")
+        df = utils.filter_df_range(df,
+                                   coverage,
+                                   "System Coverage")
+        df = utils.filter_df_range(df,  # filter specific yield
+                                   sp_yield,
+                                   "System Specific Yield",
+                                   new_dtype=float)
+        df = utils.filter_df_range(df,  # filter generation
+                                   generation,
+                                   "System Generation",
+                                   new_dtype=float)
+        df = utils.filter_df_list_mixed_type(df,
+                                             orientation,
+                                             "Array Orientation(s) Clean")
+        df = utils.filter_df_list(df,
+                                  cells,
+                                  "Module Cell Type(s)")
+        # df = utils.filter_df_range(df,  # filter transparency
+        #                            transparency,
+        #                            "Module Transparency",
+        #                            new_dtype=float)
+        df = utils.search_string_field(df,
+                                       'Project Description',
+                                       'Unknown',
+                                       search_term)
+        # render map
+        map = db_map.generate_bipv_db_map_2(df,
+                                            lat=lat,
+                                            lon=lon,
+                                            autosize=autosize,
+                                            zoom=zoom)
+        return map, df.to_dict()  # important to change DF to a dict for the store
+
 
 if __name__ == '__main__':
     app.run_server(
