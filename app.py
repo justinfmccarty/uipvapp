@@ -586,4 +586,4 @@ def filter_data(date_range, functions, sys_type, elements, coverage,
 
 if __name__ == '__main__':
     app.run_server(
-        debug=True)
+        debug=False)
