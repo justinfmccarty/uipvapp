@@ -1,6 +1,6 @@
 # dev stuff
 notebooks/
-secrets/
+secrets/*
 notebooks/*.ipynb
 notebooks/archive/*
 *.ipynb
