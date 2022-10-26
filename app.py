@@ -211,7 +211,7 @@ layout_map_page = html.Div([
 
 layout_overview_page = html.Div(children=[
     dcc.Store(data=data_intitial.to_dict(),
-              id='dataframe_init'),
+              id='dataframe_init_overview'),
     dcc.Dropdown(['Year and Type',
                   'Generation and Capacity',
                   'Surface Area and Yield',
@@ -253,7 +253,7 @@ app.validation_layout = html.Div([
 
 @app.callback(Output('overview_graphs_target', 'children'),
               Input('graph_selector', 'value'),
-              Input('dataframe_init', 'data'))
+              Input('dataframe_init_overview', 'data'))
 def update_overview_graph(option, data_store):
     data = generate_dataframe()  # pd.DataFrame.from_dict(data_store)
     if option == 'Year and Type':
