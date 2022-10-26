@@ -209,32 +209,22 @@ layout_map_page = html.Div([
              ),
 ], className='content_container')
 
-layout_overview_page = None
+# layout_overview_page = None
 
-# layout_overview_page = html.Div(children=[
-#     dcc.Store(data=data_intitial.to_dict(),
-#               id='dataframe_init_overview'),
-#     dcc.Dropdown(['Year and Type',
-#                   'Generation and Capacity',
-#                   'Surface Area and Yield',
-#                   'Surface Type'],
-#                  'Year and Type',
-#                  id='graph_selector'),
-#     html.Div(children=[
-#         #         dcc.Graph(
-#         #             figure=db_overview.make_projects_by_year(data_intitial),
-#         #             responsive=True,
-#         #             clear_on_unhover=True),
-#         #     ], className='overview_graphs'),
-#         #     html.Div([
-#         #         dcc.Graph(
-#         #             figure=db_overview.make_projects_by_generation_capacity(data_intitial),
-#         #             responsive=True,
-#         #             clear_on_unhover=True),
-#     ], id='overview_graphs_target',
-#         className='overview_graph_box'),
-# ],
-#     className='overview_container')
+layout_overview_page = html.Div(children=[
+    dcc.Store(data=data_intitial.to_dict(),
+              id='dataframe_init_overview'),
+    dcc.Dropdown(options=['Year and Type',
+                          'Generation and Capacity',
+                          'Surface Area and Yield',
+                          'Surface Type'],
+                 value='Year and Type',
+                 id='graph_selector'),
+    html.Div(children=[
+    ], id='overview_graphs_target',
+        className='overview_graph_box'),
+],
+    className='overview_container')
 
 url_bar_and_content_div = html.Div([
     dcc.Location(id='url', refresh=False),
