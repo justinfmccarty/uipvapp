@@ -226,7 +226,8 @@
 }
 
 #abstract {
-  color: var(--base_white);
+    color: var(--base_white);
+    text-align: justify;
 }
 
 .map_hover_box{

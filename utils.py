@@ -3,6 +3,7 @@ from datetime import date
 import pandas as pd
 import numpy as np
 
+
 def get_color_dict():
     k = ['highlight', 'retrofit_cat', 'new_cat', 'white', 'black',
          'colorbar_r4', 'colorbar_r3', 'colorbar_r2', 'colorbar_r1',
@@ -140,14 +141,14 @@ def add_compass_slider(id_name):
                                           # 'style': {'font-size': '5px'}
                                           },
                                     360: {'label': 'North',
-                                            # 'style': {'font-size': '5px'}
-                                            }
+                                          # 'style': {'font-size': '5px'}
+                                          }
                                     },
                              value=[0, 360],
                              tooltip={"placement": "bottom",
                                       "always_visible": False},
                              allowCross=True,
-                             id=id_name.replace(' ','_'),
+                             id=id_name.replace(' ', '_'),
                              className="range_slider_container")
     return slider
 
@@ -155,7 +156,6 @@ def add_compass_slider(id_name):
 def filter_df_range(df, range, col, new_dtype=int):
     df[col] = df[col].astype(new_dtype)
     return df[df[col].between(range[0], range[1])]
-
 
 
 def add_checklist(df, col, id_name):
@@ -175,6 +175,7 @@ def add_checklist(df, col, id_name):
     )
     return drop
 
+
 def add_dropdown(df, col, id_name):
     option_list = df[col].unique().tolist()
     drop = dcc.Dropdown(
@@ -184,21 +185,24 @@ def add_dropdown(df, col, id_name):
         placeholder=col,
         optionHeight=10,
         searchable=True,
-        id=f"{id_name.replace(' ','_')}_dropdown",
+        id=f"{id_name.replace(' ', '_')}_dropdown",
         className="filter_dropdown",
     )
     return drop
+
 
 def add_filter_input(id_name):
     input = html.Div(dcc.Input(
         id=id_name,
         type='search',
         placeholder='Search...',
-        className="filter_input"),className='filter_input_cont')
+        className="filter_input"), className='filter_input_cont')
     return input
+
 
 def filter_df_list(df, elements, col):
     return df[df[col].isin(elements)]
+
 
 def filter_df_list_mixed_type(df, range, col, clip=None):
     # # print(range)
@@ -212,7 +216,7 @@ def filter_df_list_mixed_type(df, range, col, clip=None):
     string_df = df[~df.apply(lambda x: check_dig(x[col]), axis=1)].copy()
     num_df = df[df.apply(lambda x: check_dig(x[col]), axis=1)].copy()
 
-    if clip==None:
+    if clip == None:
         num_df = filter_df_range(num_df, range, col, new_dtype=int)
     else:
         clipped = pd.Series(np.clip(num_df[col].astype(float),
@@ -220,8 +224,9 @@ def filter_df_list_mixed_type(df, range, col, clip=None):
                                     clip[1]))
         num_df = num_df[clipped.between(range[0], range[1])]
     out_df = pd.concat([string_df,
-                    num_df])
+                        num_df])
     return out_df
+
 
 def map_dict_names(map_dict, key):
     if key in map_dict.keys():
@@ -229,8 +234,9 @@ def map_dict_names(map_dict, key):
     else:
         return key
 
-def search_string_field(df,col,missing,search_term):
-    if search_term==None:
+
+def search_string_field(df, col, missing, search_term):
+    if search_term == None:
         return df
     else:
         na_df = df[df[col] == missing]
@@ -238,4 +244,3 @@ def search_string_field(df,col,missing,search_term):
         out_df = pd.concat([na_df,
                             desc_df[desc_df[col].str.contains(search_term)]])
         return out_df
-
