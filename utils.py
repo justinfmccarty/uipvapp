@@ -235,12 +235,21 @@ def map_dict_names(map_dict, key):
         return key
 
 
-def search_string_field(df, col, missing, search_term):
+def search_string_field(df, cols, search_term):
+    if type(cols) != list:
+        cols = list(cols)
+    else:
+        pass
+
     if search_term == None:
         return df
     else:
-        na_df = df[df[col] == missing]
-        desc_df = df[df[col] != missing]
-        out_df = pd.concat([na_df,
-                            desc_df[desc_df[col].str.contains(search_term)]])
+        if len(cols) == 1:
+            out_df = df[df[cols[0]].str.lower().str.contains(search_term.lower())]
+        else:
+            desc_df_list = []
+            for col in cols:
+                desc_df_list.append(df[df[col].str.lower().str.contains(search_term.lower())])
+            out_df = pd.concat(desc_df_list, axis=0)
+
         return out_df

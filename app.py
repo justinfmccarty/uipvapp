@@ -562,8 +562,7 @@ def filter_data(date_range, functions, sys_type, elements, coverage,
         #                            "Module Transparency",
         #                            new_dtype=float)
         df = utils.search_string_field(df,
-                                       'Project Description',
-                                       'Unknown',
+                                       ['Project Name','Project Description'],
                                        search_term)
         # render map
         map = db_map.generate_bipv_db_map_2(df,

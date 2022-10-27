@@ -6,7 +6,7 @@ from dash import html
 
 import utils
 
-mapbox_access_token = os.getenv('MAPBOX_KEY')
+mapbox_access_token = os.getenv('UIPV_APP_MAPBOX_KEY')
 # secret_file = os.path.join('secrets', 'mapbox_token.txt')
 # with open(secret_file, "r") as fp:
 #     mapbox_access_token = fp.readlines()[0]
@@ -236,7 +236,7 @@ def change_filter_name(og_name):
     elif og_name == 'Module Transparency':
         return 'Transparency'
     elif og_name == 'Project Description':
-        return 'Search Description'
+        return 'Search Text'
     else:
         return og_name
 
@@ -410,9 +410,9 @@ def choose_popover_content(filter_field, data_intitial):
     elif filter_field == 'Project Description':
         click_content = utils.add_filter_input('filter_input_description')
         hover_content = html.Div(f"Click '{filter_name}' and input some text"
-                                 f" to search the project descriptions. The"
-                                 f" search is currently simple looks to match"
-                                 f" single words or phrases.",
+                                 f" to search the project descriptions and titles."
+                                 f" The search is currently simple looks to match"
+                                 f" single words, phrases, and partial words.",
                                  className='filter_hover_content')
 
     else:
