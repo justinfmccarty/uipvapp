@@ -65,9 +65,10 @@ def popover_description_hover(menu_item_name):
         text = """Coming soon."""
         return text
     elif menu_item_name == 'Literature':
-        text = """Using a Natural Language Processing technique known as Latent Dirichlet Allocation we have
-                    created a set of ten research topics from over 3,400 papers relevant to urban photovoltaic 
-                    research. On this page you can query the database of papers."""
+        # text = """Using a Natural Language Processing technique known as Latent Dirichlet Allocation we have
+        #             created a set of ten research topics from over 3,400 papers relevant to urban photovoltaic
+        #             research. On this page you can query the database of papers."""
+        text = """Coming soon."""
         return text
 
 
