@@ -9,6 +9,8 @@ import db_map
 import db_overview
 import utils
 from utils import is_retrofit
+from pathlib import Path
+import os
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
@@ -20,11 +22,16 @@ app = dash.Dash(
 )
 
 server = app.server
-about_file = open('assets/about_description.txt', 'r')
+
+
+PARENT_DIR = Path(__file__).parent.resolve()
+assets_dir = os.path.join(PARENT_DIR, 'assets')
+
+about_file = open(os.path.join(assets_dir, 'about_description.txt'), 'r')
 
 
 def generate_dataframe(cols=None):
-    data = pd.read_csv('assets/database_display.csv',
+    data = pd.read_csv(os.path.join(assets_dir, 'database_display.csv'),
                        index_col="Unnamed: 0",
                        usecols=cols)
     return data
@@ -321,9 +328,9 @@ def display_hover(hover_data, data_store):
         desc = data_row['Project Description']
 
         if img_src is np.nan:
-            image_path = r'assets/images/placeholder.jpg'
+            image_path = os.path.join(assets_dir, 'images','placeholder.jpg')
         else:
-            image_path = f'assets/images/{img_src}.jpg'
+            image_path = os.path.join(assets_dir, 'images',f'{img_src}.jpg')
         im = Image.open(image_path)
         buffer = io.BytesIO()
         im.save(buffer, format="jpeg")
@@ -384,10 +391,10 @@ def show_modal(click_data, data_store):
             ext_link_id = "link_unavailable"
 
         if img_src is np.nan:
-            image_path = r'assets/images/placeholder.jpg'
+            image_path = os.path.join(assets_dir, 'images','placeholder.jpg')
             image_text = "image unavailable"
         else:
-            image_path = f'assets/images/{img_src}.jpg'
+            image_path = os.path.join(assets_dir, 'images',f'{img_src}.jpg')
             if img_src == "placeholder":
                 image_text = "image unavailable"
             else:

@@ -7,3 +7,4 @@ notebooks/archive/*
 *.ipynb
 *.DS_Store
 assets/images/*.png
+*.code-workspace
